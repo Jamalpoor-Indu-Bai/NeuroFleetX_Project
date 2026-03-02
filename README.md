@@ -193,61 +193,162 @@ ai_service/
 - **Node.js 16+** (npm)
 - **Python 3.10+**
 - **MySQL 8.0** (running on localhost:3306)
+- **Git** for version control
 
-### **Database Setup**
+### **Step 1: Clone the Repository**
+```bash
+git clone https://github.com/Jamalpoor-Indu-Bai/NeuroFleetX_Project.git
+cd NeuroFleetX_Project
+```
+
+### **Step 2: Environment Variables Setup**
+⚠️ **IMPORTANT**: Configure environment variables before running the project.
+
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env with your actual credentials
+# For Windows: notepad .env
+# For Linux/Mac: nano .env
+```
+
+**Required Environment Variables in `.env`:**
+```properties
+# MySQL Database Configuration
+DB_URL=jdbc:mysql://localhost:3306/fleetneuro?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+DB_USERNAME=your_mysql_username
+DB_PASSWORD=your_mysql_password
+
+# JWT Secret Key (change this for production)
+JWT_SECRET=your_jwt_secret_key_minimum_32_characters
+
+# Service Ports
+BACKEND_PORT=8083
+AI_SERVICE_URL=http://localhost:5000
+```
+
+### **Step 3: Database Setup**
 ```bash
 # Create MySQL database
-mysql -u root -p
+mysql -u your_username -p
 > CREATE DATABASE fleetneuro;
 > USE fleetneuro;
+> exit;
 ```
 
-Database credentials (configured in `application.properties`):
-- **User**: root
-- **Password**: system
-- **URL**: jdbc:mysql://localhost:3306/fleetneuro
-
-### **Backend Setup**
+### **Step 4: Backend Setup**
 ```bash
 cd neurofleetbackkendD
-./mvnw clean install          # Build project
-./mvnw spring-boot:run        # Start Spring Boot (Port: 8083)
+
+# Build project
+./mvnw clean install
+
+# Start Spring Boot (uses environment variables from .env)
+./mvnw spring-boot:run
+# Server will start on Port: 8083
 ```
 
-### **Frontend Setup**
+### **Step 5: Frontend Setup**
 ```bash
 cd neurofleetfrontend
-npm install                   # Install dependencies
-npm start                     # Start React Dev Server (Port: 3000)
+
+# Install dependencies
+npm install
+
+# Start React Dev Server (Port: 3000)
+npm start
 ```
 
-### **AI Service Setup**
+### **Step 6: AI Service Setup**
 ```bash
 cd ai_service
+
+# Install Python dependencies
 pip install -r requirements.txt
-python app.py                 # Start Flask (Port: 5000)
+
+# Start Flask (Port: 5000)
+python app.py
 ```
+
+### **✅ Verification**
+After starting all services, verify they're running:
+- **Frontend**: Open http://localhost:3000 in browser
+- **Backend API**: Check http://localhost:8083/actuator/health
+- **AI Service**: The terminal will show "Running on http://127.0.0.1:5000"
 
 ---
 
 ## 🌐 **Running the Project**
 
-All services run simultaneously:
+All services must run simultaneously in separate terminals:
 
 ```bash
-# Terminal 1: Backend (Java)
-cd neurofleetbackkendD && ./mvnw spring-boot:run
+# Terminal 1: Backend (Java Spring Boot)
+cd neurofleetbackkendD
+./mvnw spring-boot:run
 
 # Terminal 2: Frontend (React)
-cd neurofleetfrontend && npm start
+cd neurofleetfrontend
+npm start
 
-# Terminal 3: AI Service (Python)
-cd ai_service && python app.py
+# Terminal 3: AI Service (Python Flask)
+cd ai_service
+python app.py
 ```
 
 **Access Points:**
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8083/api
+- **AI Service**: http://localhost:5000
+
+---
+
+## 🔧 **Troubleshooting**
+
+### **Issue: Backend fails to start - Database connection error**
+**Solution:**
+1. Ensure MySQL is running: `mysql -u your_username -p`
+2. Verify `.env` file exists with correct `DB_USERNAME` and `DB_PASSWORD`
+3. Check database exists: `CREATE DATABASE IF NOT EXISTS fleetneuro;`
+4. Verify MySQL is on port 3306: `netstat -an | grep 3306`
+
+### **Issue: "DB_USERNAME" or "DB_PASSWORD" not found**
+**Solution:**
+1. Create `.env` file in the root directory (copy from `.env.example`)
+2. Fill in your actual MySQL credentials in `.env`
+3. Do NOT commit `.env` to Git (it's in .gitignore)
+
+### **Issue: Frontend can't connect to Backend**
+**Solution:**
+1. Ensure backend is running on port 8083
+2. Check CORS configuration in Spring Boot
+3. Verify `api.js` points to `http://localhost:8083/api`
+
+### **Issue: AI Service fails to start**
+**Solution:**
+1. Install Python 3.10+: `python --version`
+2. Install dependencies: `pip install -r requirements.txt`
+3. If scikit-learn fails, try: `pip install --upgrade pip setuptools wheel`
+
+### **Issue: Port already in use**
+**Solution:**
+```bash
+# Windows - Kill process on port
+netstat -ano | findstr :8083
+taskkill /PID <process_id> /F
+
+# Linux/Mac - Kill process on port
+lsof -ti:8083 | xargs kill -9
+```
+
+### **Issue: Maven build fails**
+**Solution:**
+1. Ensure Java 17 is installed: `java -version`
+2. Set JAVA_HOME environment variable
+3. Try: `./mvnw clean install -U` (forces update)
+
+---
 - **AI Service**: http://localhost:5000
 
 ---
@@ -319,21 +420,41 @@ Key entities:
 
 ## ⚙️ **Configuration**
 
-### **Backend Ports & Services**
+### **Backend Configuration (Environment Variables)**
+
+The backend uses environment variables for sensitive data. Configure these in your `.env` file:
+
 ```properties
+# Server Configuration
 server.port=8083
-ai.service.url=http://localhost:5000
-spring.datasource.url=jdbc:mysql://localhost:3306/fleetneuro
-spring.datasource.username=root
-spring.datasource.password=system
-jwt.secret=[hex-encoded-secret]
-jwt.expiration=86400000 (24 hours)
+ai.service.url=${AI_SERVICE_URL:http://localhost:5000}
+
+# MySQL Database (from environment variables)
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+# JWT Configuration (from environment variables)
+jwt.secret=${JWT_SECRET}
+jwt.expiration=86400000  # 24 hours
 ```
 
-### **Frontend Environment**
-```
+**Security Note:** Never commit `.env` file with actual credentials to Git. Use `.env.example` as a template.
+
+### **Frontend Environment Variables**
+
+Create a `.env` file in the `neurofleetfrontend` directory:
+
+```bash
 REACT_APP_API_URL=http://localhost:8083/api
 REACT_APP_WS_URL=ws://localhost:8083/ws
+```
+
+### **AI Service Configuration**
+
+The AI service reads backend URL from environment:
+```python
+SPRING_BOOT_URL = os.getenv('BACKEND_URL', 'http://localhost:8083/api')
 ```
 
 ---
