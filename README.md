@@ -1,10 +1,16 @@
 # 📋 **NeuroFleet - Intelligent Fleet Management System**
 
+## 👥 **Group Project**
+
+**NeuroFleet** is a collaborative group project developed as part of [Group D] initiative. This comprehensive full-stack application showcases modern software development practices with contributions from multiple team members working together on different components of the system.
+
+---
+
 ## 🎯 **Project Overview**
 
 **NeuroFleet** is a comprehensive intelligent fleet management and ride-sharing platform built with modern cloud-native technologies. It combines real-time vehicle tracking, AI-powered ETA predictions, automated maintenance scheduling, and role-based user management to deliver an enterprise-grade transportation solution.
 
-The system is designed for 4 user roles (Admin, Manager, Driver, Customer) with specialized dashboards and features tailored to each role's responsibilities.
+The system is designed for 4 user roles (Admin, Manager, Driver, Customer) with specialized dashboards and features tailored to each role's responsibilities. This project demonstrates collaborative development with clear separation of concerns across backend services, frontend interfaces, and AI/ML components.
 
 ---
 
@@ -385,7 +391,7 @@ REACT_APP_WS_URL=ws://localhost:8083/ws
 
 ## 📄 **License**
 
-MIT License © 2025 Samruddhi Magar
+MIT License © 2025 NeuroFleet Group D Development Team
 
 ---
 
@@ -413,4 +419,45 @@ python app.py --train  # Re-train models with latest data
 
 ---
 
-**Built with ❤️ by NeuroFleet Development Team**
+## 👨‍💼 **Team & Contributors - Group D**
+
+### **NeuroFleet Development Team**
+
+This is a collaborative group project with contributions from multiple team members working together across different technology stacks:
+
+#### **Backend Development (Java/Spring Boot)**
+- Designing and implementing RESTful API architecture
+- Database schema design and ORM integration with Hibernate
+- Spring Security and JWT authentication system
+- WebSocket configuration for real-time updates
+- Business logic and service layer implementation
+
+#### **Frontend Development (React/JavaScript)**
+- Building responsive UI with Tailwind CSS
+- Creating role-based dashboard interfaces (Admin, Manager, Driver, Customer)
+- Real-time map integration with Leaflet
+- Data visualization with Chart.js
+- Authentication flow and state management
+
+#### **AI/ML Service (Python/Flask)**
+- Developing Machine Learning models (ETA prediction, vehicle recommendation)
+- Model training pipeline with scikit-learn and Random Forest
+- API integration for AI predictions
+- Real-time inference service
+
+#### **DevOps & Integration**
+- MySQL database configuration and optimization
+- Git workflow and version control management
+- Cross-service communication setup
+- Testing and debugging across all services
+
+### **Collaborative Approach**
+- Clear separation of concerns across microservices
+- Full-stack development with modern technologies
+- Real-time communication patterns (WebSocket)
+- Machine learning integration with backend services
+- Comprehensive testing and documentation
+
+---
+
+**Built with ❤️ by NeuroFleet Development Team - Group D**
