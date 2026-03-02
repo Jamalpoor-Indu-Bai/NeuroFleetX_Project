@@ -1,15 +1,9 @@
 package com.example.neurofleetbackkendD.model;
 
-
-
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import com.example.neurofleetbackkendD.model.enums.UserRole;
-
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")

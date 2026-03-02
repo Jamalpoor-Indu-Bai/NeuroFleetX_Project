@@ -16,7 +16,8 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-     private static final String SECRET_KEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    // Using hex-encoded secret key
+    private static final String SECRET_KEY = "4e75726f466c656574585365637265744b65793230323453757065725365637572654b6579466f72574a5441757468656e7469636174696f6e";
     private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000; // 24 hours
 
     private Key getSigningKey() {

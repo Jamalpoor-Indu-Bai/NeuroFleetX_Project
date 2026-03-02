@@ -630,10 +630,26 @@ class PredictiveMaintenanceAI:
         features_scaled = self.scaler.transform(features)
         
         priority_code = self.model.predict(features_scaled)[0]
+        
+        # Get all classes the model was trained on
+        classes = self.model.classes_
         probabilities = self.model.predict_proba(features_scaled)[0]
         
+        # Create a mapping for probabilities based on actual classes
+        prob_map = {cls.item() if hasattr(cls, 'item') else cls: prob for cls, prob in zip(classes, probabilities)}
+        
         priority_map = {0: 'LOW', 1: 'MEDIUM', 2: 'HIGH'}
-        priority = priority_map[priority_code]
+        priority = priority_map.get(priority_code, 'MEDIUM')
+        
+        # Get probability for the predicted class
+        predicted_prob = prob_map.get(priority_code, 0.5)
+        
+        # Generate confidence dict with all possible classes
+        confidence = {}
+        for i in range(3):
+            cls_name = priority_map.get(i, 'UNKNOWN')
+            cls_val = prob_map.get(i, 0.0)
+            confidence[cls_name] = round(cls_val * 100, 1)
         
         # Generate recommendations
         recommendations = []
@@ -648,12 +664,8 @@ class PredictiveMaintenanceAI:
         
         return {
             'priority': priority,
-            'risk_score': round(probabilities[priority_code] * 100, 1),
-            'confidence': {
-                'LOW': round(probabilities[0] * 100, 1),
-                'MEDIUM': round(probabilities[1] * 100, 1),
-                'HIGH': round(probabilities[2] * 100, 1)
-            },
+            'risk_score': round(predicted_prob * 100, 1),
+            'confidence': confidence,
             'recommendations': recommendations if recommendations else ["Vehicle in good condition"],
             'next_maintenance_days': self._calculate_next_maintenance(priority_code, mileage)
         }
