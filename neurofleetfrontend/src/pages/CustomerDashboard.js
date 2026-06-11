@@ -56,6 +56,7 @@ const CustomerDashboard = () => {
     'Chennai T Nagar': { lat: 13.0418, lon: 80.2341 },
     'Chennai Airport': { lat: 12.9941, lon: 80.1709 },
   };
+const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     loadData();
@@ -69,8 +70,8 @@ const CustomerDashboard = () => {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       const [vehiclesRes, bookingsRes] = await Promise.all([
-        axios.get('http://localhost:8083/api/customer/vehicles', { headers }),
-        axios.get(`http://localhost:8083/api/customer/bookings?username=${username}`, { headers })
+        axios.get(`${API_URL}customer/vehicles`, { headers }),
+        axios.get(`${API_URL}customer/bookings?username=${username}`, { headers })
       ]);
 
       console.log('✅ Vehicles loaded:', vehiclesRes.data.length);
@@ -99,7 +100,7 @@ const CustomerDashboard = () => {
 
       //  Call both endpoints
       const [etaRes, recommendRes] = await Promise.all([
-        axios.post('http://localhost:8083/api/ai/eta', {
+        axios.post(`${API_URL}ai/eta`, {
           pickupLat: bookingForm.pickupLatitude,
           pickupLon: bookingForm.pickupLongitude,
           dropoffLat: bookingForm.dropoffLatitude,
@@ -108,7 +109,7 @@ const CustomerDashboard = () => {
           isElectric: false
         }, { headers: { 'Authorization': `Bearer ${token}` } }),
 
-        axios.post('http://localhost:8083/api/ai/recommend-vehicles', {
+        axios.post(`${API_URL}ai/recommend-vehicles`, {
           pickupLat: bookingForm.pickupLatitude,
           pickupLon: bookingForm.pickupLongitude,
           passengers: 1,
@@ -181,7 +182,7 @@ const CustomerDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `http://localhost:8083/api/customer/bookings?username=${username}`,
+        `${API_URL}customer/bookings?username=${username}`,
         {
           vehicleId: selectedVehicle.id,
           pickupLocation: bookingForm.pickupLocation,
@@ -222,7 +223,7 @@ const CustomerDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:8083/api/customer/bookings/${bookingId}/cancel?username=${username}`,
+        `${API_URL}customer/bookings/${bookingId}/cancel?username=${username}`,
         {},
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
@@ -239,7 +240,7 @@ const CustomerDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `http://localhost:8083/api/customer/bookings/${selectedBookingForPayment.id}/pay`,
+        `${API_URL}customer/bookings/${selectedBookingForPayment.id}/pay`,
         { paymentMethod: paymentMethod },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );

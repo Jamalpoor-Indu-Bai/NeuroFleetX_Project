@@ -37,6 +37,7 @@ const AdminDashboard = () => {
 
   const doughnutChartRef = useRef(null);
   const barChartRef = useRef(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     loadDashboardData();
@@ -50,9 +51,9 @@ const AdminDashboard = () => {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       const [dashboardRes, hourlyRes, densityRes] = await Promise.all([
-        axios.get(`${process.env.REACT_APP_API_URL}admin/dashboard`, { headers }),
-        axios.get(`${process.env.REACT_APP_API_URL}analytics/hourly-activity`, { headers }).catch(() => null),
-        axios.get(`${process.env.REACT_APP_API_URL}analytics/trip-density`, { headers }).catch(() => null)
+        axios.get(`${API_URL}admin/dashboard`, { headers }),
+        axios.get(`${API_URL}analytics/hourly-activity`, { headers }).catch(() => null),
+        axios.get(`${API_URL}analytics/trip-density`, { headers }).catch(() => null)
       ]);
 
       setDashboardData(dashboardRes.data);
@@ -87,7 +88,7 @@ const AdminDashboard = () => {
   const loadAIMaintenance = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8083/api/ai/maintenance/all', {
+      const response = await axios.get(`${API_URL}ai/maintenance/all`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setMaintenancePredictions(response.data || []);
@@ -100,7 +101,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:8083/api/analytics/reports/${reportType}/csv`,
+        `${API_URL}analytics/reports/${reportType}/csv`,
         {
           headers: { 'Authorization': `Bearer ${token}` },
           responseType: 'blob'

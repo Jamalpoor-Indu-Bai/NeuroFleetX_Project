@@ -15,6 +15,7 @@ const ManagerDashboard = () => {
   const [loading, setLoading] = useState(false);
 
   const fullName = localStorage.getItem('fullName') || 'Manager';
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const getStatusStyle = (status) => {
     const map = {
@@ -73,10 +74,10 @@ const ManagerDashboard = () => {
       const headers = { Authorization: `Bearer ${token}` };
 
       const [pendingBookingsRes, allBookingsRes, driversRes, vehiclesRes] = await Promise.all([
-        axios.get('http://localhost:8083/api/manager/bookings/pending', { headers }),
-        axios.get('http://localhost:8083/api/manager/bookings', { headers }),
-        axios.get('http://localhost:8083/api/manager/drivers/available', { headers }),
-        axios.get('http://localhost:8083/api/manager/vehicles', { headers }),
+        axios.get(`${API_URL}/api/manager/bookings/pending`, { headers }),
+        axios.get(`${API_URL}/api/manager/bookings`, { headers }),
+        axios.get(`${API_URL}/api/manager/drivers/available`, { headers }),
+        axios.get(`${API_URL}/api/manager/vehicles`, { headers }),
       ]);
 
       setPendingBookings(pendingBookingsRes.data || []);
@@ -109,14 +110,14 @@ const ManagerDashboard = () => {
 
       if (selectedBooking.status === 'PENDING') {
         await axios.put(
-          `http://localhost:8083/api/manager/bookings/${selectedBooking.id}/approve`,
+          `${API_URL}/api/manager/bookings/${selectedBooking.id}/approve`,
           {},
           { headers }
         );
       }
 
       await axios.put(
-        `http://localhost:8083/api/manager/bookings/${selectedBooking.id}/assign-driver?driverId=${selectedDriver}`,
+        `${API_URL}/api/manager/bookings/${selectedBooking.id}/assign-driver?driverId=${selectedDriver}`,
         {},
         { headers }
       );
