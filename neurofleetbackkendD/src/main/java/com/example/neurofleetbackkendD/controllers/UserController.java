@@ -1,6 +1,4 @@
 package com.example.neurofleetbackkendD.controllers;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import com.example.neurofleetbackkendD.model.User;
 import com.example.neurofleetbackkendD.model.enums.UserRole;
 import com.example.neurofleetbackkendD.repository.UserRepository;
-import com.example.neurofleetbackkendD.service.UserService;
 
 import java.util.List;
 import java.util.Map;
@@ -21,9 +18,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     
-    @Autowired
-    private UserService userService;
-    
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userRepository.findAll());
@@ -34,27 +28,6 @@ public class UserController {
         return ResponseEntity.ok(userRepository.findByRole(role));
     }
     
-    @GetMapping("/manager/drivers/available")
-    public ResponseEntity<?> getAvailableDriversWithStats() {
-        try {
-            System.out.println("🔍 DEBUG: Fetching drivers with REAL stats...");
-            List<Map<String, Object>> drivers = userService.getDriversWithRealStats();
-            System.out.println("✅ DEBUG: Returning " + drivers.size() + " drivers");
-            
-            // FIRST DRIVER TO SEE IF TRIPS ARE CALCULATED
-            if (!drivers.isEmpty()) {
-                System.out.println("🔍 DEBUG: First driver: " + drivers.get(0));
-            }
-            
-            return ResponseEntity.ok(drivers);
-        } catch (Exception e) {
-            System.err.println("❌ Error fetching drivers: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.badRequest()
-                .body(Map.of("error", e.getMessage()));
-        }
-    }
-   
  // Get driver profile
     @GetMapping("/driver/profile")
     public ResponseEntity<?> getDriverProfile(@RequestParam String username) {

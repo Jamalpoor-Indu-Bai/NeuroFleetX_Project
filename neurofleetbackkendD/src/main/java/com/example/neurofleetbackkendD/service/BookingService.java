@@ -37,7 +37,7 @@ public class BookingService {
         if (vehicle.getStatus() != VehicleStatus.AVAILABLE) {
             throw new RuntimeException("Vehicle is not available");
         }
-        
+
         booking.setStatus(BookingStatus.PENDING);
         booking.setPaymentStatus(PaymentStatus.UNPAID);
         booking.setCreatedAt(LocalDateTime.now());
@@ -303,8 +303,10 @@ public class BookingService {
     // Get bookings for manager review
     public List<Booking> getPendingBookingsForManager() {
         System.out.println("📋 Fetching pending bookings...");
-        List<Booking> bookings = bookingRepository.findByStatus(BookingStatus.PENDING);
-        System.out.println("✅ Found " + bookings.size() + " pending bookings");
+        List<Booking> bookings = bookingRepository.findByStatusIn(
+            Arrays.asList(BookingStatus.PENDING, BookingStatus.APPROVED)
+        );
+        System.out.println("✅ Found " + bookings.size() + " manager task bookings");
         return bookings;
     }
  // Get driver's active booking (IN_PROGRESS or CONFIRMED)

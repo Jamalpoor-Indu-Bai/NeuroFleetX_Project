@@ -66,6 +66,19 @@ public class ManagerController {
         }
     }
     
+    @GetMapping("/bookings")
+    public ResponseEntity<?> getAllBookings() {
+        try {
+            System.out.println("📋 Manager requesting all bookings...");
+            List<Booking> bookings = bookingService.getAllBookings();
+            System.out.println("✅ Found " + bookings.size() + " total bookings");
+            return ResponseEntity.ok(bookings);
+        } catch (Exception e) {
+            System.err.println("❌ Error fetching all bookings: " + e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+    
     @PutMapping("/bookings/{id}/approve")
     public ResponseEntity<?> approveBooking(@PathVariable Long id) {
         try {
@@ -95,7 +108,7 @@ public class ManagerController {
     public ResponseEntity<?> getAvailableDrivers() {
         try {
             System.out.println("👥 Fetching available drivers...");
-            List<User> drivers = authService.getAvailableDrivers();
+            List<User> drivers = authService.getActiveDrivers();
             System.out.println("✅ Found " + drivers.size() + " active drivers");
             return ResponseEntity.ok(drivers);
         } catch (Exception e) {

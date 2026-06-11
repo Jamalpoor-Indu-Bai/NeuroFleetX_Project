@@ -30,8 +30,17 @@ const SignupPage = () => {
     setLoading(true);
 
     try {
+      const payload = {
+        fullName: formData.fullName,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phone,
+        role: formData.role,
+      };
+
       // First signup the user
-      await authService.signup(formData);
+      await authService.signup(payload);
       setSuccess(true);
 
       // Then automatically login with the same credentials
@@ -56,7 +65,11 @@ const SignupPage = () => {
         }, 2000);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      const apiError = err.response?.data;
+      const message = typeof apiError === 'string'
+        ? apiError
+        : apiError?.message || apiError?.error || 'Registration failed. Please try again.';
+      setError(message);
     } finally {
       setLoading(false);
     }

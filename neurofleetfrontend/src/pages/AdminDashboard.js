@@ -50,9 +50,9 @@ const AdminDashboard = () => {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       const [dashboardRes, hourlyRes, densityRes] = await Promise.all([
-        axios.get('http://localhost:8083/api/admin/dashboard', { headers }),
-        axios.get('http://localhost:8083/api/analytics/hourly-activity', { headers }).catch(() => null),
-        axios.get('http://localhost:8083/api/analytics/trip-density', { headers }).catch(() => null)
+        axios.get(`${process.env.REACT_APP_API_URL}admin/dashboard`, { headers }),
+        axios.get(`${process.env.REACT_APP_API_URL}analytics/hourly-activity`, { headers }).catch(() => null),
+        axios.get(`${process.env.REACT_APP_API_URL}analytics/trip-density`, { headers }).catch(() => null)
       ]);
 
       setDashboardData(dashboardRes.data);

@@ -1,14 +1,9 @@
 package com.example.neurofleetbackkendD.model;
-
-
-
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import com.example.neurofleetbackkendD.model.enums.VehicleStatus;
 import com.example.neurofleetbackkendD.model.enums.VehicleType;
-
 
 
 @Entity
@@ -41,8 +36,7 @@ public class Vehicle {
     private Integer healthScore = 100;
     private Integer mileage = 0;
     private Double speed = 0.0;
-    @Column(length = 2)
-    private String state;
+    
     @ManyToOne
     @JoinColumn(name = "current_driver_id")
     private User currentDriver;
@@ -95,9 +89,6 @@ public class Vehicle {
     
     public Double getSpeed() { return speed; }
     public void setSpeed(Double speed) { this.speed = speed; }
-    
-    public String getState() { return state; }
-    public void setState(String state) { this.state = state; }
     
     public User getCurrentDriver() { return currentDriver; }
     public void setCurrentDriver(User currentDriver) { this.currentDriver = currentDriver; }
