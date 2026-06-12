@@ -1,13 +1,12 @@
 
 
 import axios from 'axios';
-
-const AI_API_BASE = 'http://localhost:8080/api/ai';
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/ai`;
 
 export const aiService = {
   // Predict ETA
   async predictETA(pickupLat, pickupLon, dropoffLat, dropoffLon, vehicleHealth = 0.85, isElectric = false) {
-    const response = await fetch(`${AI_API_BASE}/eta`, {
+    const response = await fetch(`${API_BASE_URL}/eta`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -39,13 +38,13 @@ export const aiService = {
 
   // Predict maintenance
   async predictMaintenance(vehicleId) {
-    const response = await fetch(`${AI_API_BASE}/maintenance/${vehicleId}`);
+    const response = await fetch(`${API_BASE_URL}/maintenance/${vehicleId}`);
     return response.json();
   },
 
   // Train models
   async trainModels() {
-    const response = await fetch(`${AI_API_BASE}/train`, { method: 'POST' });
+    const response = await fetch(`${API_BASE_URL}/train`, { method: 'POST' });
     return response.json();
   }
 };
