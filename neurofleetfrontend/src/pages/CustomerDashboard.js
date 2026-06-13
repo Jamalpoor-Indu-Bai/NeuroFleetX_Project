@@ -56,7 +56,7 @@ const CustomerDashboard = () => {
     'Chennai T Nagar': { lat: 13.0418, lon: 80.2341 },
     'Chennai Airport': { lat: 12.9941, lon: 80.1709 },
   };
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     loadData();
