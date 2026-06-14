@@ -17,7 +17,7 @@ app = Flask(__name__)
 CORS(app)
 
 #  Update backend URL to match YOUR backend
-SPRING_BOOT_URL = os.getenv('BACKEND_URL', 'http://localhost:8083/api')
+SPRING_BOOT_URL = os.getenv('BACKEND_URL', 'https://neurofleetx-yu12.onrender.com/api')
 MODEL_DIR = 'models'
 os.makedirs(MODEL_DIR, exist_ok=True)
 
