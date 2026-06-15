@@ -5,6 +5,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,14 +19,13 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
     // Using hex-encoded secret key
-    private static final String SECRET_KEY = "4e75726f466c656574585365637265744b65793230323453757065725365637572654b6579466f72574a5441757468656e7469636174696f6e";
+    @Value("${jwt.secret}")
+    private String secretKey;
     private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000; // 24 hours
 
     private Key getSigningKey() {
-        byte[] keyBytes = SECRET_KEY.getBytes();
-        return Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
-
     public String extractUsername(String token) {
         System.out.println("🔍 Extracting username from token...");
         String username = extractClaim(token, Claims::getSubject);
